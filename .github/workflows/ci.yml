@@ -24,16 +24,16 @@ jobs:
           install_args: node@14.21.3
 
       - name: Install yarn
-        run: corepack enable
+        run: mise x node@14 -- corepack enable
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: mise x node@14 -- yarn install --immutable
 
       - name: Build
-        run: yarn build
+        run: mise x node@14 -- yarn build
 
       - name: Run app and verify output
         run: |
-          output=$(yarn start --silent)
+          output=$(mise x node@14 -- yarn start --silent)
           echo "Output: $output"
           echo "$output" | grep -E "^Node version: v[0-9]+\.[0-9]+\.[0-9]+" || (echo "Unexpected output: $output" && exit 1)
