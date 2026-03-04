@@ -21,9 +21,7 @@ jobs:
         uses: jdx/mise-action@v3
         with:
           install: true
-          mise_toml: |
-            [tools]
-            node = "14.21.7"
+          install_args: node@14.21.3
 
       - name: Install yarn
         run: corepack enable
