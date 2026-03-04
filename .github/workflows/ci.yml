@@ -13,28 +13,26 @@ jobs:
     permissions:
       contents: read
 
-    strategy:
-      matrix:
-        node-version: [18, 20, 22]
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Install Mise
+        uses: jdx/mise-action@v3
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          install: true
+          mise_toml: |
+            [tools]
+            node = "14.21.7"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install yarn
+        run: corepack enable
 
       - name: Build
-        run: npm run build
+        run: yarn build
 
       - name: Run app and verify output
         run: |
-          output=$(npm start --silent)
+          output=$(yarn start --silent)
           echo "Output: $output"
           echo "$output" | grep -E "^Node version: v[0-9]+\.[0-9]+\.[0-9]+" || (echo "Unexpected output: $output" && exit 1)
